@@ -32,7 +32,7 @@ object ChatMessages {
   class ReceivedMessageTableDef(tag: Tag) extends Table[ReceivedMessage](tag, "messages") {
 
     def id = column[Long]("id", O.PrimaryKey, O.AutoInc)
-    def room = column[String]("room")
+    def room = column[String]("room", O.SqlType("varchar(80)"))
     def datetime = column[DateTime]("datetime")
     def user = column[String]("user")
     def message = column[String]("message")
@@ -55,7 +55,9 @@ object ChatMessages {
 
     def getMessages(room: String, max: Int): Future[Seq[ReceivedMessage]] = {
       require(max > 0)
-      dbConfig.db.run(messageDb.filter(_.room === room).sortBy(_.datetime.desc).take(max).result)
+      dbConfig.db.run {
+        messageDb.filter(_.room === room).sortBy(_.datetime.desc).take(max).result
+      }
     }
 
   }

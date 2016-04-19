@@ -8,7 +8,7 @@ scalaVersion := "2.11.7"
 
 val akkaVersion = "2.4.2"
 
-libraryDependencies ++= Seq( jdbc , cache , ws , specs2 % Test )
+libraryDependencies ++= Seq( evolutions, cache , ws , specs2 % Test )
 
 libraryDependencies ++= Seq(
   "com.typesafe.akka" %% "akka-cluster" % akkaVersion,
