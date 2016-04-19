@@ -42,6 +42,8 @@ class ChatController @Inject() (implicit system: ActorSystem, materializer: Mate
   }
 
   def getLatest(room: String, max: Int) = Action.async {
+    require(room.nonEmpty)
+    require(room.length < 80)
     val persistence = new ChatMessagePersistence()
     for {
       msgs <- persistence.getMessages(room, max)
@@ -49,4 +51,13 @@ class ChatController @Inject() (implicit system: ActorSystem, materializer: Mate
     } yield Ok(msgsJson)
   }
 
+  def getActiveRooms(minutes: Int) = Action.async {
+    require(minutes > 0)
+    require(minutes < 120)
+    val persistence = new ChatMessagePersistence()
+    for {
+      rooms <- persistence.getActiveRooms(minutes)
+      roomJson = Json.toJson(rooms)
+    } yield Ok(roomJson)
+  }
 }

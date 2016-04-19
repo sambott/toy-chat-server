@@ -9,6 +9,8 @@ import play.api.Play
 import play.api.db.slick.DatabaseConfigProvider
 
 import scala.concurrent.Future
+import scala.concurrent.duration._
+import scala.language.postfixOps
 
 /**
   * This file is subject to the terms and conditions defined in
@@ -57,6 +59,13 @@ object ChatMessages {
       require(max > 0)
       dbConfig.db.run {
         messageDb.filter(_.room === room).sortBy(_.datetime.desc).take(max).result
+      }
+    }
+
+    def getActiveRooms(minutes: Int): Future[Seq[String]] = {
+      require(minutes > 0)
+      dbConfig.db.run {
+        messageDb.filter(_.datetime > (DateTime.now() minusMinutes minutes)).map(_.room).distinct.result
       }
     }
 

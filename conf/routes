@@ -10,4 +10,5 @@ GET     /assets/*file               controllers.Assets.at(path="/public", file)
 
 GET     /chat/:room/ws              controllers.ChatController.ws(room)
 GET     /chat/:room                 controllers.ChatController.getLatest(room, max: Int ?=10)
+GET     /chat                       controllers.ChatController.getActiveRooms(minutes: Int ?=5)
 POST    /chat/:room                 controllers.ChatController.postMessage(room)
