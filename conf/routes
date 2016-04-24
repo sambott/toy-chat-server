@@ -9,10 +9,10 @@ GET     /                           controllers.Application.index
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
 
 # API
-GET     /room                       controllers.ChatController.getActiveRooms(minutes: Int ?=5)
-GET     /room/:room                 controllers.ChatController.getLatest(room, max: Int ?=10)
-POST    /room/:room                 controllers.ChatController.postMessage(room)
-GET     /room/:room/ws              controllers.ChatController.ws(room)
+GET     /rooms                       controllers.ChatController.getActiveRooms(minutes: Int ?=5)
+GET     /rooms/:room                 controllers.ChatController.getLatest(room, max: Int ?=10)
+POST    /rooms/:room                 controllers.ChatController.postMessage(room)
+GET     /rooms/:room/ws              controllers.ChatController.ws(room)
 
 # UI
 GET     /ui                         controllers.Application.ui
