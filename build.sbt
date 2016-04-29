@@ -57,12 +57,19 @@ libraryDependencies ++= Seq(
   "org.webjars.npm" % "es6-shim" % "0.35.0",
   "org.webjars.npm" % "reflect-metadata" % "0.1.2",
   "org.webjars.npm" % "zone.js" % "0.6.10",
-  "org.webjars.npm" % "typescript" % "1.8.10",
+  "org.webjars.npm" % "typescript" % "1.8.10"
 
   //tslint dependency
-  "org.webjars.npm" % "tslint-eslint-rules" % "1.0.1"
+  //"org.webjars.npm" % "tslint-eslint-rules" % "1.0.1",
+
+  //this app
+  //"org.webjars.npm" % "angular2-websocket" % "0.6.2"
 )
+// angular2 override
 dependencyOverrides += "org.webjars.npm" % "minimatch" % "2.0.10"
+
+// angular2-websocket override
+//dependencyOverrides += "org.webjars.npm" % "underscore.string" % "3.3.4"
 
 // the typescript typing information is by convention in the typings directory
 // It provides ES6 implementations. This is required when compiling to ES5.
