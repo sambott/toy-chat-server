@@ -21,8 +21,11 @@ import play.api.libs.concurrent.Execution.Implicits.defaultContext
   */
 
 
-class ChatController @Inject() (implicit system: ActorSystem, materializer: Materializer) extends Controller {
+class Chat(system: ActorSystem, materializer: Materializer) extends Controller {
   import ChatMessages._
+
+  implicit def actorSystem = system
+  implicit def materialiser = materializer
 
   def ws(room: String) = {
     WebSocket.accept[SentMessage, ReceivedMessage] { request =>
