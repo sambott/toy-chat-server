@@ -30,7 +30,7 @@ class Chat(dbConfig: DatabaseConfig[JdbcProfile], system: ActorSystem, materiali
 
   def ws(room: String) = {
     WebSocket.accept[SentMessage, ReceivedMessage] { request =>
-      ActorFlow.actorRef(socketRef => ChatRoomActor.props(socketRef, room))
+      ActorFlow.actorRef(socketRef => ChatRoomActor.props(dbConfig, socketRef, room))
     }
   }
 

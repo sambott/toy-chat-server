@@ -9,7 +9,7 @@ define([], function() {
     console.log(helper.sayHi());
     $rootScope.pageTitle = 'Welcome';
     playRoutes.controllers.Chat.getActiveRooms().get().then(function(response) {
-      $scope.rooms = response;
+      $scope.rooms = response.data;
     });
   };
   HomeCtrl.$inject = ['$scope', '$rootScope', '$location', 'helper', 'playRoutes'];

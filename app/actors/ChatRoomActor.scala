@@ -18,7 +18,8 @@ import slick.driver.JdbcProfile
 
 object ChatRoomActor {
 
-  def props(receiver: ActorRef, room: String) = Props(classOf[ChatRoomActor], receiver, room)
+  def props(dbConfig: DatabaseConfig[JdbcProfile], receiver: ActorRef, room: String) =
+    Props(classOf[ChatRoomActor], dbConfig, receiver, room)
 
   case class Message(user: String, msg: String, dateTime: DateTime)
 

@@ -1,17 +1,13 @@
 package models
 
+import com.github.tototoshi.slick.MySQLJodaSupport._
 import org.joda.time.DateTime
 import play.api.mvc.WebSocket.MessageFlowTransformer
+import slick.backend.DatabaseConfig
 import slick.driver.JdbcProfile
 import slick.driver.MySQLDriver.api._
-import com.github.tototoshi.slick.MySQLJodaSupport._
-import play.api.Play
-import play.api.db.slick.DatabaseConfigProvider
-import play.api.db.slick.SlickComponents
-import slick.backend.DatabaseConfig
 
 import scala.concurrent.Future
-import scala.concurrent.duration._
 import scala.language.postfixOps
 
 /**
