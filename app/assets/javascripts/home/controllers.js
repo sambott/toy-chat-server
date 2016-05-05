@@ -5,29 +5,20 @@ define([], function() {
   'use strict';
 
   /** Controls the index page */
-  var HomeCtrl = function($scope, $rootScope, $location, helper) {
+  var HomeCtrl = function($scope, $rootScope, $location, helper, playRoutes) {
     console.log(helper.sayHi());
     $rootScope.pageTitle = 'Welcome';
+    playRoutes.controllers.Chat.getActiveRooms().get().then(function(response) {
+      $scope.rooms = response;
+    });
   };
-  HomeCtrl.$inject = ['$scope', '$rootScope', '$location', 'helper'];
+  HomeCtrl.$inject = ['$scope', '$rootScope', '$location', 'helper', 'playRoutes'];
 
   /** Controls the header */
-  var HeaderCtrl = function($scope, userService, helper, $location) {
-    // Wrap the current user from the service in a watch expression
-    $scope.$watch(function() {
-      var user = userService.getUser();
-      return user;
-    }, function(user) {
-      $scope.user = user;
-    }, true);
-
-    $scope.logout = function() {
-      userService.logout();
-      $scope.user = undefined;
-      $location.path('/');
-    };
+  var HeaderCtrl = function($scope) {
+    $scope.title = 'Chat ui';
   };
-  HeaderCtrl.$inject = ['$scope', 'userService', 'helper', '$location'];
+  HeaderCtrl.$inject = ['$scope'];
 
   /** Controls the footer */
   var FooterCtrl = function(/*$scope*/) {

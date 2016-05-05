@@ -1,17 +1,12 @@
 package controllers
 
-import models._
-
 import play.api.cache._
-import play.api.libs.functional.syntax._
-import play.api.libs.json.Reads._
-import play.api.libs.json._
 import play.api.mvc._
 
 import scala.concurrent.duration._
 
 /** Application controller, handles authentication */
-class Application(val cache: CacheApi) extends Controller with Security with Logging {
+class Application(val cache: CacheApi) extends Controller with Logging {
 
   val cacheDuration = 1.day
 
@@ -56,65 +51,6 @@ class Application(val cache: CacheApi) extends Controller with Security with Log
     Action { implicit request =>
       Ok(play.api.routing.JavaScriptReverseRouter(varName)(routeCache: _*)).as(JAVASCRIPT)
     }
-  }
-
-  /** Used for obtaining the email and password from the HTTP login request */
-  case class LoginCredentials(email: String, password: String)
-
-  /** JSON reader for [[LoginCredentials]]. */
-  implicit val LoginCredentialsFromJson = (
-    (__ \ "email").read[String](minLength[String](5)) ~
-      (__ \ "password").read[String](minLength[String](8))
-    )((email, password) => LoginCredentials(email, password))
-
-  /**
-   * Log-in a user. Expects the credentials in the body in JSON format.
-   *
-   * Set the cookie [[AuthTokenCookieKey]] to have AngularJS set the X-XSRF-TOKEN in the HTTP
-   * header.
-   *
-   * @return The token needed for subsequent requests
-   */
-  def login() = Action(parse.json) { implicit request =>
-    request.body.validate[LoginCredentials].fold(
-      errors => {
-        BadRequest(Json.obj("status" -> "KO", "message" -> JsError.toJson(errors)))
-      },
-      credentials => {
-        // TODO Check credentials, log user in, return correct token
-        User.findByEmailAndPassword(credentials.email, credentials.password).fold {
-          log.info("Unregistered user tried to log in")
-          BadRequest(Json.obj("status" -> "KO", "message" -> "User not registered"))
-        } { user =>
-          /*
-           * For this demo, return a dummy token. A real application would require the following,
-           * as per the AngularJS documentation:
-           *
-           * > The token must be unique for each user and must be verifiable by the server (to
-           * > prevent the JavaScript from making up its own tokens). We recommend that the token is
-           * > a digest of your site's authentication cookie with a salt) for added security.
-           *
-           */
-          val token = java.util.UUID.randomUUID.toString
-          cache.set(token, user.id.get)
-          log.info(s"User ${user.id.get} succesfully logged in")
-          Ok(Json.obj("token" -> token))
-            .withCookies(Cookie(AuthTokenCookieKey, token, None, httpOnly = false))
-        }
-      }
-    )
-  }
-
-  /**
-   * Log-out a user. Invalidates the authentication token.
-   *
-   * Discard the cookie [[AuthTokenCookieKey]] to have AngularJS no longer set the
-   * X-XSRF-TOKEN in HTTP header.
-   */
-  def logout() = HasToken(parse.empty) { token => userId => implicit request =>
-    cache.remove(token)
-    log.info(s"User $userId succesfully logged out")
-    Ok.discardingCookies(DiscardingCookie(name = AuthTokenCookieKey))
   }
 
 }

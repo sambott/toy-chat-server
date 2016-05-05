@@ -7,6 +7,8 @@ import slick.driver.MySQLDriver.api._
 import com.github.tototoshi.slick.MySQLJodaSupport._
 import play.api.Play
 import play.api.db.slick.DatabaseConfigProvider
+import play.api.db.slick.SlickComponents
+import slick.backend.DatabaseConfig
 
 import scala.concurrent.Future
 import scala.concurrent.duration._
@@ -46,9 +48,8 @@ object ChatMessages {
 
   }
 
-  class ChatMessagePersistence {
+  class ChatMessagePersistence(dbConfig: DatabaseConfig[JdbcProfile]) {
 
-    val dbConfig = DatabaseConfigProvider.get[JdbcProfile](Play.current)
     val messageDb = TableQuery[ReceivedMessageTableDef]
 
     def saveMessage(receivedMessage: ReceivedMessage): Unit = {

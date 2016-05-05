@@ -10,8 +10,9 @@ import play.api.mvc._
 import play.api.libs.streams._
 import play.api.libs.json.Json
 import play.api.libs.json._
-
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
+import slick.backend.DatabaseConfig
+import slick.driver.JdbcProfile
 
 /**
   * This file is subject to the terms and conditions defined in
@@ -21,7 +22,7 @@ import play.api.libs.concurrent.Execution.Implicits.defaultContext
   */
 
 
-class Chat(system: ActorSystem, materializer: Materializer) extends Controller {
+class Chat(dbConfig: DatabaseConfig[JdbcProfile], system: ActorSystem, materializer: Materializer) extends Controller {
   import ChatMessages._
 
   implicit def actorSystem = system
@@ -35,7 +36,7 @@ class Chat(system: ActorSystem, materializer: Materializer) extends Controller {
 
   def postMessage(room: String) = Action(parse.json) { request =>
     request.body.validate[SentMessage].map{ in =>
-      ChatRoomActor.sendMessage(room, in)
+      ChatRoomActor.sendMessage(dbConfig, room, in)
     }.fold(
       invalid = errors =>
         BadRequest(s"Could not deserialise fields: ${ errors map (_._1) mkString "," }")
@@ -47,7 +48,7 @@ class Chat(system: ActorSystem, materializer: Materializer) extends Controller {
   def getLatest(room: String, max: Int) = Action.async {
     require(room.nonEmpty)
     require(room.length < 80)
-    val persistence = new ChatMessagePersistence()
+    val persistence = new ChatMessagePersistence(dbConfig)
     for {
       msgs <- persistence.getMessages(room, max)
       msgsJson = Json.toJson(msgs)
@@ -57,7 +58,7 @@ class Chat(system: ActorSystem, materializer: Materializer) extends Controller {
   def getActiveRooms(minutes: Int) = Action.async {
     require(minutes > 0)
     require(minutes < 120)
-    val persistence = new ChatMessagePersistence()
+    val persistence = new ChatMessagePersistence(dbConfig)
     for {
       rooms <- persistence.getActiveRooms(minutes)
       roomJson = Json.toJson(rooms)
