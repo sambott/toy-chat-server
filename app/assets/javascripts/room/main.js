@@ -1,5 +1,5 @@
 define(['angular', './routes', './controller'], function(angular) {
   'use strict';
 
-  return angular.module('yourprefix.room', ['ngRoute', 'room.routes']);
+  return angular.module('chatapp.room', ['ngRoute', 'room.routes']);
 });

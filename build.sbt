@@ -43,10 +43,11 @@ libraryDependencies ++= Seq(
 
   // WebJars (i.e. client-side) dependencies
   "org.webjars" % "requirejs" % "2.1.14-1",
-  "org.webjars" % "underscorejs" % "1.6.0-3",
   "org.webjars" % "jquery" % "1.11.1",
   "org.webjars" % "bootstrap" % "3.3.6" exclude("org.webjars", "jquery"),
-  "org.webjars" % "angularjs" % "1.4.9" exclude("org.webjars", "jquery")
+  "org.webjars" % "angularjs" % "1.4.9" exclude("org.webjars", "jquery"),
+  "org.webjars.bower" % "angular-websocket" % "1.1.0",
+  "org.webjars.npm" % "lodash" % "4.11.1"
 )
 
 // Scala Compiler Options

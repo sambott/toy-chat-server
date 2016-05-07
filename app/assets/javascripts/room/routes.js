@@ -4,7 +4,7 @@
 define(['angular', './controller', 'common'], function(angular, controller) {
   'use strict';
 
-  var mod = angular.module('room.routes', ['yourprefix.common']);
+  var mod = angular.module('room.routes', ['chatapp.common']);
   mod.config(['$routeProvider', function($routeProvider) {
     $routeProvider
       .when('/room/:room', {templateUrl:'/assets/javascripts/room/room.html', controller:controller.RoomCtrl});

@@ -55,7 +55,7 @@ object ChatMessages {
     def getMessages(room: String, max: Int): Future[Seq[ReceivedMessage]] = {
       require(max > 0)
       dbConfig.db.run {
-        messageDb.filter(_.room === room).sortBy(_.datetime.desc).take(max).result
+        messageDb.filter(_.room === room).sortBy(_.datetime.asc).take(max).result
       }
     }
 

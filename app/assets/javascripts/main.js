@@ -19,7 +19,8 @@
       },
       'angular-route': ['angular'],
       'angular-cookies': ['angular'],
-      'bootstrap': ['jquery']
+      'bootstrap': ['jquery'],
+      'angular-websocket': ['angular']
     },
     paths: {
       'requirejs': ['../lib/requirejs/require'],
@@ -28,7 +29,8 @@
       'angular-route': ['../lib/angularjs/angular-route'],
       'angular-cookies': ['../lib/angularjs/angular-cookies'],
       'bootstrap': ['../lib/bootstrap/js/bootstrap'],
-      'jsRoutes': ['/jsroutes']
+      'jsRoutes': ['/jsroutes'],
+      'angular-websocket': ['../lib/angular-websocket/angular-websocket']
     }
   });
 
