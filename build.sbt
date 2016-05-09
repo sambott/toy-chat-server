@@ -2,9 +2,9 @@ import com.typesafe.sbt.packager.docker._
 
 name := "chat_server"
 organization in ThisBuild := "bott.org.uk"
-version := "1.1"
+version := "1.2"
 
-lazy val `chat_server` = (project in file(".")).enablePlugins(PlayScala,ElasticBeanstalkPlugin)
+lazy val `chat_server` = (project in file(".")).enablePlugins(PlayScala,ClasspathJarPlugin,ElasticBeanstalkPlugin)
 
 scalaVersion in ThisBuild := "2.11.8"
 val akkaVersion = "2.4.2"
@@ -23,6 +23,7 @@ javaOptions in Universal ++= Seq(
 )
 
 // Dependencies
+val angularVer = "1.4.9"
 libraryDependencies ++= Seq(
   // Play components
   evolutions,
@@ -43,11 +44,12 @@ libraryDependencies ++= Seq(
 
   // WebJars (i.e. client-side) dependencies
   "org.webjars" % "requirejs" % "2.1.14-1",
-  "org.webjars" % "jquery" % "1.11.1",
-  "org.webjars" % "bootstrap" % "3.3.6" exclude("org.webjars", "jquery"),
-  "org.webjars" % "angularjs" % "1.4.9" exclude("org.webjars", "jquery"),
-  "org.webjars.bower" % "angular-websocket" % "1.1.0",
-  "org.webjars.npm" % "lodash" % "4.11.1"
+  "org.webjars.bower" % "jquery" % "1.11.1",
+  "org.webjars.bower" % "bootstrap" % "3.3.6",
+  "org.webjars.bower" % "angular" % angularVer,
+  "org.webjars.bower" % "angular-cookies" % angularVer,
+  "org.webjars.bower" % "angular-route" % angularVer,
+  "org.webjars.bower" % "angular-websocket" % "1.1.0"
 )
 
 // Scala Compiler Options

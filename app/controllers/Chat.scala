@@ -51,7 +51,7 @@ class Chat(dbConfig: DatabaseConfig[JdbcProfile], system: ActorSystem, materiali
     val persistence = new ChatMessagePersistence(dbConfig)
     for {
       msgs <- persistence.getMessages(room, max)
-      msgsJson = Json.toJson(msgs)
+      msgsJson = Json.toJson(msgs.reverse)
     } yield Ok(msgsJson)
   }
 

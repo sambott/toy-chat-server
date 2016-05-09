@@ -22,15 +22,15 @@
       'bootstrap': ['jquery'],
       'angular-websocket': ['angular']
     },
-    paths: {
+    paths: { // CDN replacement([]) only for clasic webjars
       'requirejs': ['../lib/requirejs/require'],
-      'jquery': ['../lib/jquery/jquery'],
-      'angular': ['../lib/angularjs/angular'],
-      'angular-route': ['../lib/angularjs/angular-route'],
-      'angular-cookies': ['../lib/angularjs/angular-cookies'],
-      'bootstrap': ['../lib/bootstrap/js/bootstrap'],
+      'jquery': '../lib/jquery/dist/jquery',
+      'angular': '../lib/angular/angular',
+      'angular-route': '../lib/angular-route/angular-route',
+      'angular-cookies': '../lib/angular-cookies/angular-cookies',
+      'bootstrap': '../lib/bootstrap/dist/js/bootstrap',
       'jsRoutes': ['/jsroutes'],
-      'angular-websocket': ['../lib/angular-websocket/angular-websocket']
+      'angular-websocket': '../lib/angular-websocket/angular-websocket'
     }
   });
 
