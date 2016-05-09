@@ -1,3 +1,6 @@
+import actors.ClusteredAkkaConfig
+import akka.actor.ActorSystem
+import com.typesafe.config.ConfigFactory
 import play.api.ApplicationLoader.Context
 import play.api._
 import play.api.cache.EhCacheComponents
@@ -25,6 +28,8 @@ class AppComponents(context: Context) extends BuiltInComponentsFromContext(conte
   with SlickComponents
   with EvolutionsComponents
   with SlickEvolutionsComponents {
+
+  val clusteredSystem = ActorSystem.create("clustered", ClusteredAkkaConfig.config)
 
   lazy val dbConfig = api.dbConfig[JdbcProfile](DbName("default"))
 

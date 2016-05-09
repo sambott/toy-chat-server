@@ -41,6 +41,7 @@ libraryDependencies ++= Seq(
   "com.typesafe.play" %% "play-slick-evolutions" % "2.0.0",
   "mysql" % "mysql-connector-java" % "5.1.38",
   "com.github.tototoshi" %% "slick-joda-mapper" % "2.1.0",
+  "com.amazonaws" % "aws-java-sdk" % "1.10.76",
 
   // WebJars (i.e. client-side) dependencies
   "org.webjars" % "requirejs" % "2.1.14-1",
