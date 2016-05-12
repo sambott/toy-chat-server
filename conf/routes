@@ -4,6 +4,7 @@
 
 # Home page
 GET           /                    controllers.Application.index
+GET           /status              controllers.Chat.status
 
 # JavaScript routes object
 GET           /jsroutes.js         controllers.Application.jsRoutes()

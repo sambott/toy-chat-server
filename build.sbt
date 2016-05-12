@@ -2,7 +2,7 @@ import com.typesafe.sbt.packager.docker._
 
 name := "chat_server"
 organization in ThisBuild := "bott.org.uk"
-version := "1.2"
+version := "1.3-beta.1"
 
 lazy val `chat_server` = (project in file(".")).enablePlugins(PlayScala,ClasspathJarPlugin,ElasticBeanstalkPlugin)
 
@@ -11,7 +11,7 @@ val akkaVersion = "2.4.2"
 
 // Docker settings
 maintainer in Docker := "Sam Bott"
-dockerExposedPorts := Seq(9000)
+dockerExposedPorts := Seq(9000,2551)
 dockerBaseImage := "java:latest"
 // this chmods the file to executable, Windows doesn't set that bit in the zip file.
 dockerCommands += ExecCmd("RUN",
@@ -42,6 +42,7 @@ libraryDependencies ++= Seq(
   "mysql" % "mysql-connector-java" % "5.1.38",
   "com.github.tototoshi" %% "slick-joda-mapper" % "2.1.0",
   "com.amazonaws" % "aws-java-sdk" % "1.10.76",
+  "com.amazonaws" % "aws-java-sdk-elasticbeanstalk" % "1.10.77",
 
   // WebJars (i.e. client-side) dependencies
   "org.webjars" % "requirejs" % "2.1.14-1",

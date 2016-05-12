@@ -1,16 +1,15 @@
 package controllers
 
-import javax.inject.Inject
-
 import actors.ChatRoomActor
 import akka.actor.ActorSystem
+import akka.cluster.Cluster
+import akka.cluster.protobuf.msg.ClusterMessages.MemberStatus
 import akka.stream.Materializer
 import models.ChatMessages
-import play.api.mvc._
-import play.api.libs.streams._
-import play.api.libs.json.Json
-import play.api.libs.json._
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
+import play.api.libs.json.Json
+import play.api.libs.streams._
+import play.api.mvc._
 import slick.backend.DatabaseConfig
 import slick.driver.JdbcProfile
 
@@ -22,11 +21,13 @@ import slick.driver.JdbcProfile
   */
 
 
-class Chat(dbConfig: DatabaseConfig[JdbcProfile], system: ActorSystem, materializer: Materializer) extends Controller {
+class Chat(dbConfig: DatabaseConfig[JdbcProfile], clusteredSystem: ActorSystem, materializer: Materializer) extends Controller {
   import ChatMessages._
 
-  implicit def actorSystem = system
+  implicit def actorSystem = clusteredSystem
   implicit def materialiser = materializer
+
+  def cluster = Cluster(clusteredSystem)
 
   def ws(room: String) = {
     WebSocket.accept[SentMessage, ReceivedMessage] { request =>
@@ -63,5 +64,12 @@ class Chat(dbConfig: DatabaseConfig[JdbcProfile], system: ActorSystem, materiali
       rooms <- persistence.getActiveRooms(minutes)
       roomJson = Json.toJson(rooms)
     } yield Ok(roomJson)
+  }
+
+  def status() = Action {
+    Ok(
+      cluster.state.members.filter(_.status == MemberStatus.Up).
+        map(_.uniqueAddress.address.toString) mkString
+    )
   }
 }

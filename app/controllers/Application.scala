@@ -1,5 +1,6 @@
 package controllers
 
+import akka.cluster.Cluster
 import play.api.cache._
 import play.api.mvc._
 
@@ -11,9 +12,9 @@ class Application(val cache: CacheApi) extends Controller with Logging {
   val cacheDuration = 1.day
 
   /**
-   * Caching action that caches an OK response for the given amount of time with the key.
-   * NotFound will be cached for 5 mins. Any other status will not be cached.
-   */
+    * Caching action that caches an OK response for the given amount of time with the key.
+    * NotFound will be cached for 5 mins. Any other status will not be cached.
+    */
   def Caching(key: String, okDuration: Duration) =
     new Cached(cache)
       .status(_ => key, OK, okDuration.toSeconds.toInt)
@@ -26,10 +27,11 @@ class Application(val cache: CacheApi) extends Controller with Logging {
   }
 
   /**
-   * Retrieves all routes via reflection.
-   * http://stackoverflow.com/questions/12012703/less-verbose-way-of-generating-play-2s-javascript-router
-   * @todo If you have controllers in multiple packages, you need to add each package here.
-   */
+    * Retrieves all routes via reflection.
+    * http://stackoverflow.com/questions/12012703/less-verbose-way-of-generating-play-2s-javascript-router
+    *
+    * @todo If you have controllers in multiple packages, you need to add each package here.
+    */
   val routeCache = {
     val jsRoutesClasses = Seq(classOf[routes.javascript]) // TODO add your own packages
     jsRoutesClasses.flatMap { jsRoutesClass =>
@@ -43,14 +45,14 @@ class Application(val cache: CacheApi) extends Controller with Logging {
   }
 
   /**
-   * Returns the JavaScript router that the client can use for "type-safe" routes.
-   * Uses browser caching; set duration (in seconds) according to your release cycle.
-   * @param varName The name of the global variable, defaults to `jsRoutes`
-   */
+    * Returns the JavaScript router that the client can use for "type-safe" routes.
+    * Uses browser caching; set duration (in seconds) according to your release cycle.
+    *
+    * @param varName The name of the global variable, defaults to `jsRoutes`
+    */
   def jsRoutes(varName: String = "jsRoutes") = Caching("jsRoutes", cacheDuration) {
     Action { implicit request =>
       Ok(play.api.routing.JavaScriptReverseRouter(varName)(routeCache: _*)).as(JAVASCRIPT)
     }
   }
-
 }

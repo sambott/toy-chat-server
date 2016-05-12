@@ -7,10 +7,11 @@ package actors
   * Sam Bott, 09/05/2016.
   */
 import com.amazonaws.auth.InstanceProfileCredentialsProvider
-import com.amazonaws.regions.{Regions, Region}
+import com.amazonaws.regions.{Region, Regions}
 import com.amazonaws.services.autoscaling.AmazonAutoScalingClient
 import com.amazonaws.services.ec2.AmazonEC2Client
-import com.typesafe.config.{ConfigValueFactory, ConfigFactory}
+import com.typesafe.config.{ConfigFactory, ConfigValueFactory}
+
 import scala.collection.JavaConversions._
 
 object ClusteredAkkaConfig {
@@ -23,6 +24,14 @@ object ClusteredAkkaConfig {
     new EC2(scalingClient, ec2Client)
   }
 
+  private lazy val eb = {
+    val credentials = new InstanceProfileCredentialsProvider
+    val region = Regions.getCurrentRegion
+    val scalingClient = new AmazonAutoScalingClient(credentials) { setRegion(region) }
+    val ebClient = new AmazonEC2Client(credentials) { setRegion(region) }
+    new EB(scalingClient, ebClient)
+  }
+
   private val local = sys.props.get("clustered.akka.port").isDefined
 
   val (host, siblings, port) =
@@ -30,8 +39,8 @@ object ClusteredAkkaConfig {
       println("Running with local configuration")
       ("localhost", "localhost" :: Nil, sys.props("clustered.akka.port"))
     } else {
-      println("Using EC2 autoscaling configuration")
-      (ec2.currentIp, ec2.siblingIps, "2551")
+      println("Using EB autoscaling configuration")
+      (eb.currentIp, eb.siblingIps, "2551")
     }
 
   val seeds = siblings map (ip => s"akka.tcp://akka-ec2@$ip:2551")

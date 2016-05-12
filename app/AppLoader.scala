@@ -1,6 +1,5 @@
 import actors.ClusteredAkkaConfig
 import akka.actor.ActorSystem
-import com.typesafe.config.ConfigFactory
 import play.api.ApplicationLoader.Context
 import play.api._
 import play.api.cache.EhCacheComponents
@@ -33,13 +32,9 @@ class AppComponents(context: Context) extends BuiltInComponentsFromContext(conte
 
   lazy val dbConfig = api.dbConfig[JdbcProfile](DbName("default"))
 
-  lazy val chatController = new controllers.Chat(dbConfig, actorSystem, materializer)
+  lazy val chatController = new controllers.Chat(dbConfig, clusteredSystem, materializer)
   lazy val applicationController = new controllers.Application(defaultCacheApi)
   lazy val assets = new controllers.Assets(httpErrorHandler)
-
-//  lazy val dbConfigProvider: DatabaseConfigProvider = new DatabaseConfigProvider {
-//    override def get[P <: BasicProfile]: DatabaseConfig[P] = api.dbConfig(DbName("default"))
-//  }
 
   // Routes is a generated class
   override def router: Router = new Routes(httpErrorHandler, applicationController, chatController, assets)
