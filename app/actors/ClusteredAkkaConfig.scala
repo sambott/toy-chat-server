@@ -45,13 +45,13 @@ object ClusteredAkkaConfig {
       (eb.currentIp, eb.siblingIps, "2551")
     case "EC2" =>
       log info "Using EC2 autoscaling configuration"
-      (ec2.currentIp, ec2.siblingIps, "2551")
+      (ec2.currentIp, "localhost" :: ec2.siblingIps, "2551")
     case _ =>
       log info "Running with local configuration"
       ("localhost", "localhost" :: Nil, defaults.getString("akka.remote.netty.tcp.port"))
   }
 
-  val seeds = siblings map (ip => s"akka.tcp://akka-ec2@$ip:2551")
+  val seeds = siblings map (ip => s"akka.tcp://clustered@$ip:2551")
 
   private val overrideConfig =
     ConfigFactory.empty()

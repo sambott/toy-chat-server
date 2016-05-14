@@ -3,6 +3,7 @@
 Chat server created on Play Framework
 
 Set Environment variable `AUTOSCALE` to "EC2" or "EB" to auto scale.
+Also requires role policies to access describeInstances() and security group tcp to itself on 2551
 
 ***
 #### Credits
