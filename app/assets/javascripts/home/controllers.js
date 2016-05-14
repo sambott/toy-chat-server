@@ -5,22 +5,12 @@ define([], function() {
   'use strict';
 
   /** Controls the index page */
-  var HomeCtrl = function($scope, $rootScope, $location, helper, playRoutes) {
+  var HomeCtrl = function($scope, $rootScope) {
 
     $rootScope.pageTitle = 'Chat App';
-    $scope.newRoom='';
 
-    playRoutes.controllers.Chat.getActiveRooms().get().then(function(response) {
-      $scope.rooms = response.data;
-    });
-
-    $scope.onNewRoom = function () {
-      if ($scope.newRoom) {
-        $location.path('/room/' + $scope.newRoom);
-      }
-    };
   };
-  HomeCtrl.$inject = ['$scope', '$rootScope', '$location', 'helper', 'playRoutes'];
+  HomeCtrl.$inject = ['$scope', '$rootScope'];
 
   /** Controls the header */
   var HeaderCtrl = function($scope) {

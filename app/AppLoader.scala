@@ -26,6 +26,7 @@ class AppComponents(context: Context) extends BuiltInComponentsFromContext(conte
   with EvolutionsComponents
   with SlickEvolutionsComponents {
 
+
   lazy val dbConfig = api.dbConfig[JdbcProfile](DbName("default"))
 
   lazy val chatController = new controllers.Chat(dbConfig, actorSystem, materializer)

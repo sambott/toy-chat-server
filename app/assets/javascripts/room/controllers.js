@@ -4,6 +4,29 @@
 define(['jsRoutes'], function(jsRoutes) {
   'use strict';
 
+  /** Controls the room picker page */
+  var RoomPickerCtrl = function($scope, $rootScope, $location, helper, playRoutes) {
+
+    $scope.newRoom='';
+
+    playRoutes.controllers.Chat.getActiveRooms().get().then(function(response) {
+      $scope.rooms = response.data;
+    });
+
+    $scope.onNewRoom = function () {
+      if ($scope.newRoom) {
+        $location.path('/room/' + $scope.newRoom);
+      }
+    };
+  };
+  RoomPickerCtrl.$inject = ['$scope', '$rootScope', '$location', 'helper', 'playRoutes'];
+
+  /** Controls the header */
+  var HeaderCtrl = function($scope) {
+    $scope.title = 'Chat App';
+  };
+  HeaderCtrl.$inject = ['$scope'];
+
   /** Controls the index page */
   var RoomCtrl = function($scope, $routeParams, helper, playRoutes, $websocket) {
 
@@ -36,6 +59,7 @@ define(['jsRoutes'], function(jsRoutes) {
   RoomCtrl.$inject = ['$scope', '$routeParams', 'helper', 'playRoutes', '$websocket'];
 
   return {
+    RoomPickerCtrl: RoomPickerCtrl,
     RoomCtrl: RoomCtrl
   };
 
