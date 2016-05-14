@@ -2,7 +2,7 @@ import com.typesafe.sbt.packager.docker._
 
 name := "chat_server"
 organization in ThisBuild := "bott.org.uk"
-version := "1.3-beta.1"
+version := "1.3-beta.2"
 
 lazy val `chat_server` = (project in file(".")).enablePlugins(PlayScala,ClasspathJarPlugin,ElasticBeanstalkPlugin)
 
@@ -42,7 +42,7 @@ libraryDependencies ++= Seq(
   "mysql" % "mysql-connector-java" % "5.1.38",
   "com.github.tototoshi" %% "slick-joda-mapper" % "2.1.0",
   "com.amazonaws" % "aws-java-sdk" % "1.10.76",
-  "com.amazonaws" % "aws-java-sdk-elasticbeanstalk" % "1.10.77",
+  //"com.amazonaws" % "aws-java-sdk-elasticbeanstalk" % "1.10.77",
 
   // WebJars (i.e. client-side) dependencies
   "org.webjars" % "requirejs" % "2.1.14-1",

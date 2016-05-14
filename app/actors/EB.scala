@@ -49,7 +49,7 @@ class EB(scaling: AmazonAutoScalingClient, ec2: AmazonEC2Client) {
   private def peers: Seq[Instance] = {
     val filters = Seq(
       new Filter("instance-state-name").withValues("running"),
-      new Filter("elasticbeanstalk:environment-name").withValues(environmentName)
+      new Filter("tag:elasticbeanstalk:environment-name=" + environmentName)
     )
     instancesFromFilter(filters)
   }

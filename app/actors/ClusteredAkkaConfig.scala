@@ -11,10 +11,14 @@ import com.amazonaws.regions.{Region, Regions}
 import com.amazonaws.services.autoscaling.AmazonAutoScalingClient
 import com.amazonaws.services.ec2.AmazonEC2Client
 import com.typesafe.config.{ConfigFactory, ConfigValueFactory}
+import play.api.Logger
 
 import scala.collection.JavaConversions._
 
 object ClusteredAkkaConfig {
+
+  private val log = Logger("ClusterConfig")
+  private val AUTOSCALE_VAR = "AUTOSCALE"
 
   private lazy val ec2 = {
     val credentials = new InstanceProfileCredentialsProvider
@@ -32,16 +36,20 @@ object ClusteredAkkaConfig {
     new EB(scalingClient, ebClient)
   }
 
-  private val local = sys.props.get("clustered.akka.port").isDefined
+  private val defaults = ConfigFactory.load().getConfig("clustered")
+  private def env = System.getenv()
 
-  val (host, siblings, port) =
-    if (local) {
-      println("Running with local configuration")
-      ("localhost", "localhost" :: Nil, sys.props("clustered.akka.port"))
-    } else {
-      println("Using EB autoscaling configuration")
+  val (host, siblings, port) = env.getOrDefault(AUTOSCALE_VAR, "local").toUpperCase match {
+    case "EB" =>
+      log info "Using EB autoscaling configuration"
       (eb.currentIp, eb.siblingIps, "2551")
-    }
+    case "EC2" =>
+      log info "Using EC2 autoscaling configuration"
+      (ec2.currentIp, ec2.siblingIps, "2551")
+    case _ =>
+      log info "Running with local configuration"
+      ("localhost", "localhost" :: Nil, defaults.getString("akka.remote.netty.tcp.port"))
+  }
 
   val seeds = siblings map (ip => s"akka.tcp://akka-ec2@$ip:2551")
 
@@ -50,8 +58,6 @@ object ClusteredAkkaConfig {
       .withValue("akka.remote.netty.tcp.hostname", ConfigValueFactory.fromAnyRef(host))
       .withValue("akka.remote.netty.tcp.port", ConfigValueFactory.fromAnyRef(port))
       .withValue("akka.cluster.seed-nodes", ConfigValueFactory.fromIterable(seeds))
-
-  private val defaults = ConfigFactory.load().getConfig("clustered")
 
   val config = overrideConfig withFallback defaults
 }
