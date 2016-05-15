@@ -1,26 +1,11 @@
-import com.typesafe.sbt.packager.docker._
-
 name := "chat_server"
 organization in ThisBuild := "bott.org.uk"
-version := "1.3-beta.7"
+version := "1.3-beta.8"
 
-lazy val `chat_server` = (project in file(".")).enablePlugins(PlayScala,ClasspathJarPlugin,ElasticBeanstalkPlugin)
+lazy val `chat_server` = (project in file(".")).enablePlugins(PlayScala,ClasspathJarPlugin)
 
 scalaVersion in ThisBuild := "2.11.8"
 val akkaVersion = "2.4.2"
-
-// Docker settings
-maintainer in Docker := "Sam Bott"
-dockerExposedPorts := Seq(9000,2551)
-dockerBaseImage := "java:latest"
-// this chmods the file to executable, Windows doesn't set that bit in the zip file.
-dockerCommands += ExecCmd("RUN",
-  "chmod", "+x",
-  s"${(defaultLinuxInstallLocation in Docker).value}/bin/${executableScriptName.value}")
-// docker has no need for a running pid, it just gets in the way
-javaOptions in Universal ++= Seq(
-  "-Dpidfile.path=/dev/null"
-)
 
 // Dependencies
 val angularVer = "1.4.9"
@@ -29,7 +14,6 @@ libraryDependencies ++= Seq(
   evolutions,
   filters,
   cache,
-  ws,
   specs2 % Test,
 
   // Backend
@@ -67,6 +51,21 @@ scalacOptions in ThisBuild ++= Seq(
   "-Ywarn-inaccessible",
   "-Ywarn-dead-code"
 )
+
+// SBT Assembly
+mainClass in assembly := Some("play.core.server.ProdServerStart")
+fullClasspath in assembly += Attributed.blank(PlayKeys.playPackageAssets.value)
+// Exclude commons-logging because it conflicts with the jcl-over-slf4j
+libraryDependencies ~= { _ map {
+//  case m if m.organization == "com.typesafe.play" =>
+//    m.exclude("commons-logging", "commons-logging")
+  case m => m.exclude("commons-logging", "commons-logging")
+}}
+assemblyMergeStrategy in assembly := {
+  case PathList("play", "core", "server", "ServerWithStop.class") => MergeStrategy.first
+  case PathList(ps@_*) if ps.last endsWith ".properties" => MergeStrategy.first
+  case other => (assemblyMergeStrategy in assembly).value(other)
+}
 
 //
 // sbt-web configuration
