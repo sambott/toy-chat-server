@@ -5,11 +5,11 @@ define(['jsRoutes'], function(jsRoutes) {
   'use strict';
 
   /** Controls the room picker page */
-  var RoomPickerCtrl = function($scope, $rootScope, $location, helper, playRoutes) {
+  var RoomPickerCtrl = function($scope, $rootScope, $location, helper, backend) {
 
     $scope.newRoom='';
 
-    playRoutes.controllers.Chat.getActiveRooms().get().then(function(response) {
+    backend.controllers.Chat.getActiveRooms().get().then(function(response) {
       $scope.rooms = response.data;
     });
 
@@ -19,7 +19,7 @@ define(['jsRoutes'], function(jsRoutes) {
       }
     };
   };
-  RoomPickerCtrl.$inject = ['$scope', '$rootScope', '$location', 'helper', 'playRoutes'];
+  RoomPickerCtrl.$inject = ['$scope', '$rootScope', '$location', 'helper', 'backend'];
 
   /** Controls the header */
   var HeaderCtrl = function($scope) {
@@ -28,7 +28,7 @@ define(['jsRoutes'], function(jsRoutes) {
   HeaderCtrl.$inject = ['$scope'];
 
   /** Controls the index page */
-  var RoomCtrl = function($scope, $routeParams, helper, playRoutes, $websocket) {
+  var RoomCtrl = function($scope, $routeParams, helper, backend, $websocket) {
 
     $scope.roomName = $routeParams.room;
     $scope.userName = 'guest';
@@ -41,7 +41,7 @@ define(['jsRoutes'], function(jsRoutes) {
       dataStream.close();
     });
 
-    playRoutes.controllers.Chat.getLatest($scope.roomName).get().then(function(response) {
+    backend.controllers.Chat.getLatest($scope.roomName).get().then(function(response) {
       $scope.latestMsgs = response.data;
     }).then(function () {
       dataStream.onMessage(function(message) {
@@ -52,11 +52,11 @@ define(['jsRoutes'], function(jsRoutes) {
     $scope.onNewMessage = function () {
       if ($scope.userName && $scope.newMessage) {
         var msg = {user: $scope.userName, message: $scope.newMessage};
-        playRoutes.controllers.Chat.postMessage($scope.roomName).post(msg);
+        backend.controllers.Chat.postMessage($scope.roomName).post(msg);
       }
     };
   };
-  RoomCtrl.$inject = ['$scope', '$routeParams', 'helper', 'playRoutes', '$websocket'];
+  RoomCtrl.$inject = ['$scope', '$routeParams', 'helper', 'backend', '$websocket'];
 
   return {
     RoomPickerCtrl: RoomPickerCtrl,
