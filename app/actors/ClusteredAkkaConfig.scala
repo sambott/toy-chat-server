@@ -28,35 +28,25 @@ object ClusteredAkkaConfig {
     new EC2(scalingClient, ec2Client)
   }
 
-  private lazy val eb = {
-    val credentials = new InstanceProfileCredentialsProvider
-    val region = Regions.getCurrentRegion
-    val scalingClient = new AmazonAutoScalingClient(credentials) { setRegion(region) }
-    val ebClient = new AmazonEC2Client(credentials) { setRegion(region) }
-    new EB(scalingClient, ebClient)
-  }
-
   private val defaults = ConfigFactory.load().getConfig("clustered")
   private def env = System.getenv()
+  private val port = defaults.getString("akka.remote.netty.tcp.port")
 
-  val (host, siblings, port) = env.getOrDefault(AUTOSCALE_VAR, "local").toUpperCase match {
-    case "EB" =>
-      log info "Using EB autoscaling configuration"
-      (eb.currentIp, eb.siblingIps, "2551")
+  val (host, bindHost, siblings) = env.getOrDefault(AUTOSCALE_VAR, "local").toUpperCase match {
     case "EC2" =>
       log info "Using EC2 autoscaling configuration"
-      (ec2.currentIp, "localhost" :: ec2.siblingIps, "2551")
+      (ec2.currentIp, "::0", ec2.siblingIps)
     case _ =>
       log info "Running with local configuration"
-      ("localhost", "localhost" :: Nil, defaults.getString("akka.remote.netty.tcp.port"))
+      ("localhost", "::0" , "localhost" :: Nil)
   }
 
-  val seeds = siblings map (ip => s"akka.tcp://clustered@$ip:2551")
+  val seeds = siblings map (ip => s"akka.tcp://clustered@$ip:$port")
 
   private val overrideConfig =
     ConfigFactory.empty()
+      .withValue("akka.remote.netty.tcp.bind-hostname", ConfigValueFactory.fromAnyRef(bindHost))
       .withValue("akka.remote.netty.tcp.hostname", ConfigValueFactory.fromAnyRef(host))
-      .withValue("akka.remote.netty.tcp.port", ConfigValueFactory.fromAnyRef(port))
       .withValue("akka.cluster.seed-nodes", ConfigValueFactory.fromIterable(seeds))
 
   val config = overrideConfig withFallback defaults

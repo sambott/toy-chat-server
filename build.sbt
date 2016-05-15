@@ -2,7 +2,7 @@ import com.typesafe.sbt.packager.docker._
 
 name := "chat_server"
 organization in ThisBuild := "bott.org.uk"
-version := "1.3-beta.4"
+version := "1.3-beta.7"
 
 lazy val `chat_server` = (project in file(".")).enablePlugins(PlayScala,ClasspathJarPlugin,ElasticBeanstalkPlugin)
 
@@ -50,7 +50,7 @@ libraryDependencies ++= Seq(
   "org.webjars.bower" % "angular" % angularVer,
   "org.webjars.bower" % "angular-cookies" % angularVer,
   "org.webjars.bower" % "angular-route" % angularVer,
-  "org.webjars.bower" % "angular-websocket" % "1.1.0"
+  "org.webjars.bower" % "angular-websocket" % "1.1.0" // need 1.1.1 as soon as its ready to rid of annoying error logging bug
 )
 
 // Scala Compiler Options

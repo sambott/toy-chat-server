@@ -1,5 +1,6 @@
 import actors.ClusteredAkkaConfig
 import akka.actor.ActorSystem
+import akka.cluster.Cluster
 import play.api.ApplicationLoader.Context
 import play.api._
 import play.api.cache.EhCacheComponents
@@ -12,6 +13,7 @@ import play.api.routing.Router
 import play.filters.cors.CORSFilter
 import play.filters.gzip.GzipFilter
 import slick.driver.JdbcProfile
+
 import router.Routes
 
 class AppLoader extends ApplicationLoader {
@@ -29,6 +31,11 @@ class AppComponents(context: Context) extends BuiltInComponentsFromContext(conte
   with SlickEvolutionsComponents {
 
   val clusteredSystem = ActorSystem.create("clustered", ClusteredAkkaConfig.config)
+  applicationLifecycle.addStopHook{ () =>
+    val clust = Cluster(clusteredSystem)
+    clust.leave(clust.selfAddress)
+    clusteredSystem.terminate()
+  }
 
   lazy val dbConfig = api.dbConfig[JdbcProfile](DbName("default"))
 

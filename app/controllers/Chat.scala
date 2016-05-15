@@ -13,6 +13,8 @@ import play.api.mvc._
 import slick.backend.DatabaseConfig
 import slick.driver.JdbcProfile
 
+import scala.language.postfixOps
+
 /**
   * This file is subject to the terms and conditions defined in
   * file 'LICENSE.txt', which is part of this source code package.
