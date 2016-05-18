@@ -1,27 +1,58 @@
-<h1></h1>
+<h1>Chat Client Hackathon</h1>
 <div>
-  <h1>Chat Client Hackathon</h1>
-  <p>
-    Your challenge is to form teams of 2-3 and create a chat client. You can use any technology stack you like.
-  </p>
+  <h4>Your challenge is to create a chat client.</h4>
+  <ul>
+    <li>Form groups of 2-3</li>
+    <li>Decide on a platform and technology stack</li>
+    <ul>
+      <li>You can use any platform you like</li>
+      <ul>
+        <li>Web based</li>
+        <li>Console app</li>
+        <li>Mobile app</li>
+        <li>Windows/MacOS Client</li>
+        <li>Even an app for a games console ... if you happen to have brought one</li>
+      </ul>
+      <li>We'll provide a couple of starter projects (below) to demonstrate the API or to help get you started if you would like.</li>
+      <li>Nobody is expecting a fully working product.</li>
+      <ul>
+        <li>Pick a technology you think will be fun, and spend the time aiming for basic functionality.</li>
+        <li>Or pick a technology you are comfortable with and spend time adding some polish or interesting features
+          (perhaps nice look/feel, or emojis, or room-switching....)</li>
+      </ul>
+    </ul>
+    <li>Hack! You'll have four hours to build something</li>
+    <li>We'll be wondering around. Ask if you would like any assistance.</li>
+    <li>At the end of the afternoon, we'll ask you to show us what you came up with.</li>
+    <ul>
+      <li>What technology stack did you decide on? Why?</li>
+      <li>What did you get working? What didn't you?</li>
+      <li>Any interesting bits of code you'd like to show off??</li>
+      <li>Demonstrate your client.</li>
+    </ul>
+  </ul>
 </div>
 <div>
   <h3>API</h3>
   <table>
     <tr><td>GET</td><td>/rooms</td><td>Retrieves a list of the rooms with recent activity.</td></tr>
     <tr><td>GET</td><td>/rooms/:room</td><td>Gets most recent messages for the chat room.</td></tr>
-    <tr><td>POST</td><td>/rooms/:room</td><td>Post a message to he chat room</td></tr>
-    <tr><td>GET</td><td>/rooms/:room/ws</td><td>Open a websocket for event-driven sending and receiving of messages</td></tr>
+    <tr><td>POST</td><td>/rooms/:room</td><td>Post a message to the chat room</td></tr>
+    <tr><td>GET</td><td>/rooms/:room/ws</td><td>Open a WebSocket for event-driven sending and receiving of messages</td></tr>
   </table>
 </div>
 <div>
-  <h3>Starter projects</h3>
+  <h3>Links and Starter projects</h3>
+  <h4>Seeds:</h4>
   <ul>
     <li>Python</li>
     <li>AngularJS</li>
   </ul>
-</div>
-<div>
-  <p><a href="#/room">Basic UI</a></p>
-  <p>View the source code on <a href="https://github.com/sambott/toy-chat-server">GitHub</a></p>
+  <h4>Useful Links:</h4>
+  <ul>
+    <li><a href="#/room">Basic Demo UI</a></li>
+    <li><a href="https://chrome.google.com/webstore/detail/postman/fhbjgbiflinjbdggehcddcbncdddomop?hl=en">PostMan</a></li>
+    <li><a href="https://chrome.google.com/webstore/detail/dark-websocket-terminal/dmogdjmcpfaibncngoolgljgocdabhke?hl=en">Dark WebSocket Terminal</a></li>
+    <li>View the source code on <a href="https://github.com/sambott/toy-chat-server">GitHub</a></li>
+  </ul>
 </div>
