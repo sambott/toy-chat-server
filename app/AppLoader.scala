@@ -7,9 +7,10 @@ import play.api.db.slick.{DbName, SlickComponents}
 import play.api.i18n.I18nComponents
 import play.api.mvc.EssentialFilter
 import play.api.routing.Router
-import play.filters.cors.CORSFilter
+import play.filters.cors.{CORSConfig, CORSFilter}
 import play.filters.gzip.GzipFilter
 import slick.driver.JdbcProfile
+
 import router.Routes
 
 class AppLoader extends ApplicationLoader {
@@ -46,9 +47,9 @@ class AppComponents(context: Context) extends BuiltInComponentsFromContext(conte
       contentType.exists(_.startsWith("text/html")) || request.path.endsWith("jsroutes.js")
     })
 
-  val corsFilter = CORSFilter()
+  val corsFilter = CORSFilter(CORSConfig.fromConfiguration(configuration))
 
-  override lazy val httpFilters: Seq[EssentialFilter] = Seq(gzipFilter, corsFilter)
+  override lazy val httpFilters: Seq[EssentialFilter] = Seq(corsFilter, gzipFilter)
 
   override lazy val dynamicEvolutions: DynamicEvolutions = new DynamicEvolutions
 

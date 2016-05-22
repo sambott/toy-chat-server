@@ -2,7 +2,7 @@ import com.typesafe.sbt.packager.docker._
 
 name := "chat_server"
 organization in ThisBuild := "bott.org.uk"
-version := "1.4.beta-0"
+version := "1.4"
 
 lazy val `chat_server` = (project in file(".")).enablePlugins(PlayScala,ClasspathJarPlugin,ElasticBeanstalkPlugin)
 

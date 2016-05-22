@@ -1,0 +1,71 @@
+<h2>Sample AngularJS Client</h2>
+<div>
+  <ul>
+    <li>Easy way to test is to install <a href="https://nodejs.org/en/">node.js</a></li>
+    <li>Then install a local web-server with <code>npm install -g local-web-server</code></li>
+    <li>And then run a web server from a folder with <code>ws</code></li>
+  </ul>
+</div>
+<div><pre>
+&lt;!doctype html&gt;
+&lt;html data-ng-app=&quot;demo&quot;&gt;
+&lt;head&gt;
+  &lt;script src=&quot;https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.min.js&quot;&gt;&lt;/script&gt;
+  &lt;script&gt;
+
+
+
+  // Javascript
+    var URL_ROOT = &#39;{{backendRoot}}&#39;
+    var PROTO = &#39;{{backendProtocol}}&#39;
+    var WS_PROTO = &#39;{{backendWsProtocol}}&#39;
+
+    var app = angular.module(&#39;demo&#39;,[]).config(function($httpProvider) {
+      // Enable cross domain calls
+      $httpProvider.defaults.useXDomain = true;
+      delete $httpProvider.defaults.headers.common[&#39;X-Requested-With&#39;];
+    });
+
+    app.controller(&#39;ChatController&#39;, function ($scope, $http) {
+      function updateMessages() {
+        $http.get(PROTO + URL_ROOT + &#39;/rooms/&#39; + $scope.roomName).then(function(response) {
+          $scope.messages = response.data;
+        });
+      }
+
+      $scope.roomName = &#39;test&#39;;
+      $scope.roomChanged = updateMessages;
+
+      updateMessages();
+    });
+
+
+
+  &lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;div data-ng-view&gt;
+
+
+<div data-ng-non-bindable>
+&lt;!-- HTML --&gt;
+  &lt;div data-ng-controller=&quot;ChatController&quot;&gt;
+    &lt;h1&gt;Recent room activity&lt;/h1&gt;
+    &lt;label&gt;
+      &lt;span&gt;Room Name:&lt;/span&gt;
+      &lt;input type=&quot;text&quot; data-ng-model=&quot;roomName&quot; ng-model-options=&quot;{ debounce: 500 }&quot; data-ng-change=&quot;roomChanged()&quot;&gt;
+    &lt;/label&gt;
+    &lt;div&gt;
+      &lt;h3&gt;Messages&lt;/h3&gt;
+      &lt;ul&gt;
+        &lt;li data-ng-repeat=&quot;msg in messages&quot;&gt;
+          [{{msg.dateTime | date:&#39;MM/dd/yyyy @ h:mma&#39;}}] &lt;b&gt;{{msg.user}}&lt;/b&gt; - {{msg.message}}
+        &lt;/li&gt;
+      &lt;/ul&gt;
+  &lt;/div&gt;
+</div>
+
+
+&lt;/div&gt;
+&lt;/body&gt;
+</pre></div>
