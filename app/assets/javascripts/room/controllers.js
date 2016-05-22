@@ -21,12 +21,6 @@ define(['jsRoutes'], function(jsRoutes) {
   };
   RoomPickerCtrl.$inject = ['$scope', '$rootScope', '$location', 'helper', 'backend'];
 
-  /** Controls the header */
-  var HeaderCtrl = function($scope) {
-    $scope.title = 'Chat App';
-  };
-  HeaderCtrl.$inject = ['$scope'];
-
   /** Controls the index page */
   var RoomCtrl = function($scope, $routeParams, helper, backend, $websocket) {
 
