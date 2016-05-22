@@ -6,6 +6,8 @@ import akka.cluster.pubsub.DistributedPubSubMediator.{Publish, Subscribe}
 import models.ChatMessages
 import models.ChatMessages.ChatMessagePersistence
 import org.joda.time.DateTime
+import slick.backend.DatabaseConfig
+import slick.driver.JdbcProfile
 
 /**
   * This file is subject to the terms and conditions defined in
@@ -16,23 +18,24 @@ import org.joda.time.DateTime
 
 object ChatRoomActor {
 
-  def props(receiver: ActorRef, room: String) = Props(classOf[ChatRoomActor], receiver, room)
+  def props(dbConfig: DatabaseConfig[JdbcProfile], receiver: ActorRef, room: String) =
+    Props(classOf[ChatRoomActor], dbConfig, receiver, room)
 
   case class Message(user: String, msg: String, dateTime: DateTime)
 
   def roomTopic(room: String) = s"chatroom-$room"
 
-  def sendMessage(room: String, message: ChatMessages.SentMessage)(implicit system: ActorSystem) = {
+  def sendMessage(dbConfig: DatabaseConfig[JdbcProfile], room: String, message: ChatMessages.SentMessage)(implicit system: ActorSystem) = {
     val mediator = DistributedPubSub(system).mediator
     val topic = roomTopic(room)
     mediator ! Publish(topic, ChatRoomActor.Message(message.user, message.message, DateTime.now()))
-    val persistence = new ChatMessagePersistence()
+    val persistence = new ChatMessagePersistence(dbConfig)
     persistence.saveMessage(message.toReceivedMessage(room))
   }
 
 }
 
-class ChatRoomActor(receiver: ActorRef, room: String) extends Actor with ActorLogging {
+class ChatRoomActor(dbConfig: DatabaseConfig[JdbcProfile], receiver: ActorRef, room: String) extends Actor with ActorLogging {
   import ChatRoomActor._
 
   implicit def system = context.system
@@ -42,7 +45,7 @@ class ChatRoomActor(receiver: ActorRef, room: String) extends Actor with ActorLo
 
   def receive = {
     case msg: ChatMessages.SentMessage =>
-      sendMessage(room, msg)
+      sendMessage(dbConfig, room, msg)
 
     case Message(from, text, dt) =>
       receiver ! ChatMessages.ReceivedMessage(from, text, dt, room)

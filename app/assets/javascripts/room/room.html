@@ -1,0 +1,23 @@
+<br />
+<div>
+  <div class="well" id="chatBox" scroll-to-bottom="latestMsgs">
+    <div class="panel panel-primary" data-ng-repeat="msg in latestMsgs">
+      <div class="panel-heading"><b>{{msg.user}}</b> - {{msg.dateTime | date:'medium'}}</div>
+      <div class="panel-body">
+        {{msg.message}}
+      </div>
+    </div>
+  </div>
+  <div>
+    <label>
+      Your Name:
+      <input type="text" data-ng-model="userName">
+    </label>
+    <br>
+    <label>
+      Message:
+      <input type="text" data-ng-model="newMessage">
+    </label>
+    <input type="button" data-ng-click="onNewMessage()" value="Send">
+  </div>
+</div>
