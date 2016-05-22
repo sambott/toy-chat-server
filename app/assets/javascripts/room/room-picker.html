@@ -1,0 +1,15 @@
+<h2>Chat Rooms</h2>
+<div data-ng-show="!!rooms.length">
+  <h4>Active Rooms:</h4>
+  <ul data-ng-repeat="room in rooms">
+    <li><a href="#/room/{{room}}">{{room}}</a></li>
+  </ul>
+</div>
+<div>
+  <h4>Create New Room</h4>
+  <label>
+    Room Name:
+    <input type="text" data-ng-model="newRoom">
+  </label>
+  <input type="button" data-ng-click="onNewRoom()" value="Create">
+</div>
