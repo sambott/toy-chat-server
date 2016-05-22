@@ -34,19 +34,38 @@
 </div>
 <div>
   <h3>API</h3>
+  <h4><code>{{backendProtocol}}{{backendRoot}}</code></h4>
+  <h5>Routes</h5>
   <table>
-    <tr><td>GET</td><td>/rooms</td><td>Retrieves a list of the rooms with recent activity.</td></tr>
-    <tr><td>GET</td><td>/rooms/:room</td><td>Gets most recent messages for the chat room.</td></tr>
-    <tr><td>POST</td><td>/rooms/:room</td><td>Post a message to the chat room</td></tr>
-    <tr><td>GET</td><td>/rooms/:room/ws</td><td>Open a WebSocket for event-driven sending and receiving of messages</td></tr>
+    <tr><td><code>GET</code></td><td><code>/rooms</code></td><td>Retrieves a list of the rooms with recent activity.</td></tr>
+    <tr><td><code>GET</code></td><td><code>/rooms/:room</code></td><td>Gets most recent messages for the chat room.</td></tr>
+    <tr><td><code>POST</code></td><td><code>/rooms/:room</code></td><td>Post a message to the chat room</td></tr>
+    <tr><td><code>GET</code></td><td><code>/rooms/:room/ws</code></td><td>Open a WebSocket for event-driven sending and receiving of messages</td></tr>
   </table>
+  <h5>Objects</h5>
+  <p>A sent message should resemble:</p>
+  <pre>
+    {
+      "user": "your name",
+      "message": "the message to send"
+    }
+  </pre>
+  <p>Messages you receive will resemble:</p>
+  <pre>
+    {
+      "user":"their name",
+      "message":"message text",
+      "dateTime":1463930717000, // milliseconds since unix epoch
+      "room":"room_name"
+    }
+  </pre>
 </div>
 <div>
   <h3>Links and Starter projects</h3>
   <h4>Seeds:</h4>
   <ul>
-    <li>Python</li>
-    <li>AngularJS</li>
+    <li><a href="#/sample/python">Python</a></li>
+    <li><a href="#/sample/angularjs">AngularJS</a></li>
   </ul>
   <h4>Useful Links:</h4>
   <ul>
