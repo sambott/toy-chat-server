@@ -44,9 +44,16 @@ object ChatMessages {
 
   }
 
-  class ChatMessagePersistence(dbConfig: DatabaseConfig[JdbcProfile]) {
+  trait ChatMessagePersistence{
+    def saveMessage(receivedMessage: ReceivedMessage): Unit
+    def getMessages(room: String, max: Int): Future[Seq[ReceivedMessage]]
+    def getActiveRooms(minutes: Int): Future[Seq[String]]
+  }
 
-    val messageDb = TableQuery[ReceivedMessageTableDef]
+  class SlickChatMessagePersistence
+  (dbConfig: DatabaseConfig[JdbcProfile]) extends ChatMessagePersistence {
+
+    protected val messageDb = TableQuery[ReceivedMessageTableDef]
 
     def saveMessage(receivedMessage: ReceivedMessage): Unit = {
       dbConfig.db.run(messageDb += receivedMessage)

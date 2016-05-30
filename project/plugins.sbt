@@ -6,7 +6,7 @@ resolvers += "Typesafe repository" at "https://repo.typesafe.com/typesafe/releas
 resolvers += Resolver.url("bintray-kipsigman-sbt-plugins", url("http://dl.bintray.com/kipsigman/sbt-plugins"))(Resolver.ivyStylePatterns)
 
 // Use the Play sbt plugin for Play projects
-addSbtPlugin("com.typesafe.play" % "sbt-plugin" % "2.5.2")
+addSbtPlugin("com.typesafe.play" % "sbt-plugin" % "2.5.3")
 
 // Build + Deployments
 addSbtPlugin("kipsigman" % "sbt-elastic-beanstalk" % "0.1.3")

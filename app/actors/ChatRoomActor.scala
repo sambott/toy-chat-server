@@ -18,24 +18,24 @@ import slick.driver.JdbcProfile
 
 object ChatRoomActor {
 
-  def props(dbConfig: DatabaseConfig[JdbcProfile], receiver: ActorRef, room: String) =
-    Props(classOf[ChatRoomActor], dbConfig, receiver, room)
+  def props(msgPersistence: ChatMessagePersistence, receiver: ActorRef, room: String) =
+    Props(classOf[ChatRoomActor], msgPersistence, receiver, room)
 
   case class Message(user: String, msg: String, dateTime: DateTime)
 
   def roomTopic(room: String) = s"chatroom-$room"
 
-  def sendMessage(dbConfig: DatabaseConfig[JdbcProfile], room: String, message: ChatMessages.SentMessage)(implicit system: ActorSystem) = {
+  def sendMessage(msgPersistence: ChatMessagePersistence, room: String, message: ChatMessages.SentMessage)(implicit system: ActorSystem) = {
     val mediator = DistributedPubSub(system).mediator
     val topic = roomTopic(room)
     mediator ! Publish(topic, ChatRoomActor.Message(message.user, message.message, DateTime.now()))
-    val persistence = new ChatMessagePersistence(dbConfig)
-    persistence.saveMessage(message.toReceivedMessage(room))
+    msgPersistence.saveMessage(message.toReceivedMessage(room))
   }
 
 }
 
-class ChatRoomActor(dbConfig: DatabaseConfig[JdbcProfile], receiver: ActorRef, room: String) extends Actor with ActorLogging {
+class ChatRoomActor(msgPersistence: ChatMessagePersistence, receiver: ActorRef, room: String)
+  extends Actor with ActorLogging {
   import ChatRoomActor._
 
   implicit def system = context.system
@@ -45,7 +45,7 @@ class ChatRoomActor(dbConfig: DatabaseConfig[JdbcProfile], receiver: ActorRef, r
 
   def receive = {
     case msg: ChatMessages.SentMessage =>
-      sendMessage(dbConfig, room, msg)
+      sendMessage(msgPersistence, room, msg)
 
     case Message(from, text, dt) =>
       receiver ! ChatMessages.ReceivedMessage(from, text, dt, room)

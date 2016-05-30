@@ -1,5 +1,7 @@
+package components
+
+import models.ChatMessages
 import play.api.ApplicationLoader.Context
-import play.api._
 import play.api.cache.EhCacheComponents
 import play.api.db.evolutions.{DynamicEvolutions, EvolutionsComponents}
 import play.api.db.slick.evolutions.SlickEvolutionsComponents
@@ -7,6 +9,7 @@ import play.api.db.slick.{DbName, SlickComponents}
 import play.api.i18n.I18nComponents
 import play.api.mvc.EssentialFilter
 import play.api.routing.Router
+import play.api.{Application, ApplicationLoader, BuiltInComponentsFromContext, LoggerConfigurator}
 import play.filters.cors.{CORSConfig, CORSFilter}
 import play.filters.gzip.GzipFilter
 import slick.driver.JdbcProfile
@@ -27,16 +30,12 @@ class AppComponents(context: Context) extends BuiltInComponentsFromContext(conte
   with EvolutionsComponents
   with SlickEvolutionsComponents {
 
+  protected def dbConfig = api.dbConfig[JdbcProfile](DbName("default"))
+  lazy val chatPersistence = new ChatMessages.SlickChatMessagePersistence(dbConfig)
 
-  lazy val dbConfig = api.dbConfig[JdbcProfile](DbName("default"))
-
-  lazy val chatController = new controllers.Chat(dbConfig, actorSystem, materializer)
+  lazy val chatController = new controllers.Chat(chatPersistence, actorSystem, materializer)
   lazy val applicationController = new controllers.Application(defaultCacheApi)
   lazy val assets = new controllers.Assets(httpErrorHandler)
-
-//  lazy val dbConfigProvider: DatabaseConfigProvider = new DatabaseConfigProvider {
-//    override def get[P <: BasicProfile]: DatabaseConfig[P] = api.dbConfig(DbName("default"))
-//  }
 
   // Routes is a generated class
   override def router: Router = new Routes(httpErrorHandler, applicationController, chatController, assets)

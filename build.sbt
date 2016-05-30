@@ -30,7 +30,7 @@ libraryDependencies ++= Seq(
   filters,
   cache,
   ws,
-  specs2 % Test,
+  "org.scalatestplus.play" %% "scalatestplus-play" % "1.5.1" % Test,
 
   // Backend
   "com.typesafe.akka" %% "akka-cluster" % akkaVersion,
@@ -40,6 +40,7 @@ libraryDependencies ++= Seq(
   "com.typesafe.play" %% "play-slick" % "2.0.0",
   "com.typesafe.play" %% "play-slick-evolutions" % "2.0.0",
   "mysql" % "mysql-connector-java" % "5.1.38",
+  "com.h2database" % "h2" % "1.4.191" % Test,
   "com.github.tototoshi" %% "slick-joda-mapper" % "2.1.0",
 
   // WebJars (i.e. client-side) dependencies

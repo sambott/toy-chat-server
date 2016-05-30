@@ -6,6 +6,7 @@ import actors.ChatRoomActor
 import akka.actor.ActorSystem
 import akka.stream.Materializer
 import models.ChatMessages
+import models.ChatMessages.ChatMessagePersistence
 import play.api.mvc._
 import play.api.libs.streams._
 import play.api.libs.json.Json
@@ -22,7 +23,7 @@ import slick.driver.JdbcProfile
   */
 
 
-class Chat(dbConfig: DatabaseConfig[JdbcProfile], system: ActorSystem, materializer: Materializer) extends Controller {
+class Chat(msgPersistence: ChatMessagePersistence, system: ActorSystem, materializer: Materializer) extends Controller {
   import ChatMessages._
 
   implicit def actorSystem = system
@@ -30,13 +31,13 @@ class Chat(dbConfig: DatabaseConfig[JdbcProfile], system: ActorSystem, materiali
 
   def ws(room: String) = {
     WebSocket.accept[SentMessage, ReceivedMessage] { request =>
-      ActorFlow.actorRef(socketRef => ChatRoomActor.props(dbConfig, socketRef, room))
+      ActorFlow.actorRef(socketRef => ChatRoomActor.props(msgPersistence, socketRef, room))
     }
   }
 
   def postMessage(room: String) = Action(parse.json) { request =>
     request.body.validate[SentMessage].map{ in =>
-      ChatRoomActor.sendMessage(dbConfig, room, in)
+      ChatRoomActor.sendMessage(msgPersistence, room, in)
     }.fold(
       invalid = errors =>
         BadRequest(s"Could not deserialise fields: ${ errors map (_._1) mkString "," }")
@@ -48,9 +49,8 @@ class Chat(dbConfig: DatabaseConfig[JdbcProfile], system: ActorSystem, materiali
   def getLatest(room: String, max: Int) = Action.async {
     require(room.nonEmpty)
     require(room.length < 80)
-    val persistence = new ChatMessagePersistence(dbConfig)
     for {
-      msgs <- persistence.getMessages(room, max)
+      msgs <- msgPersistence.getMessages(room, max)
       msgsJson = Json.toJson(msgs.reverse)
     } yield Ok(msgsJson)
   }
@@ -58,9 +58,8 @@ class Chat(dbConfig: DatabaseConfig[JdbcProfile], system: ActorSystem, materiali
   def getActiveRooms(minutes: Int) = Action.async {
     require(minutes > 0)
     require(minutes < 120)
-    val persistence = new ChatMessagePersistence(dbConfig)
     for {
-      rooms <- persistence.getActiveRooms(minutes)
+      rooms <- msgPersistence.getActiveRooms(minutes)
       roomJson = Json.toJson(rooms)
     } yield Ok(roomJson)
   }

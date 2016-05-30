@@ -9,8 +9,7 @@
     </layout>
   </appender>
 
-  <logger name="actors" level="debug"
-          additivity="false">
+  <logger name="actors" level="info" additivity="false">
     <appender-ref ref="STDOUT" />
   </logger>
 
