@@ -22,7 +22,7 @@
       'bootstrap': ['jquery'],
       'angular-websocket': ['angular']
     },
-    paths: { // CDN replacement([]) only for clasic webjars
+    paths: { // CDN replacement([]) only for classic webjars
       'requirejs': ['../lib/requirejs/require'],
       'jquery': '../lib/jquery/dist/jquery',
       'angular': '../lib/angular/angular',
