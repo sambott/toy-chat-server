@@ -7,7 +7,7 @@ define([], function() {
   /** Controls the index page */
   var HomeCtrl = function($scope, $rootScope, $location) {
 
-    $rootScope.pageTitle = 'Chat App';
+    $rootScope.pageTitle = 'Chat Client Mini-Hackathon';
 
     $scope.backendProtocol = $location.protocol() + '://';
     $scope.backendWsProtocol = $scope.backendProtocol.replace('http', 'ws');
@@ -25,7 +25,7 @@ define([], function() {
 
   /** Controls the header */
   var HeaderCtrl = function($scope) {
-    $scope.title = 'Chat App';
+    $scope.title = 'Chat Client Mini-Hackathon';
   };
   HeaderCtrl.$inject = ['$scope'];
 

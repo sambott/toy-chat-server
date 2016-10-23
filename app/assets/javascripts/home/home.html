@@ -1,46 +1,84 @@
-<h1>Chat Client Hackathon</h1>
 <div>
-  <h4>Your challenge is to create a chat client.</h4>
+  <h3>Your challenge: Create a Client to a Simple Chat Server.</h3>
+  <p>With a small group and some inspiration, create something interesting over the course of the afternoon.</p>
+  <p>You'll be programming against a very simple web api to a chat/instant-messaging service.</p>
+  <p>Be inspired, come up with something that sounds interesting to you, and is achievable in a few hours. Have fun!</p>
+
+  <h4>Some Ideas:</h4>
+  <h5>Create a chat room client</h5>
+  <ul>
+    <li>Choose an interesting platform:
+      <ul>
+        <li>A web app</li>
+        <li>A mobile app</li>
+      </ul>
+    </li>
+    <li>Maybe add some interesting features:
+      <ul>
+        <li>Emoticons</li>
+        <li><code>@name</code> mention alerts</li>
+      </ul>
+    </li>
+  </ul>
+  <h5>Create a chat bot</h5>
+  <ul>
+    <li>Create a bot that is able to:
+      <ul>
+        <li>Answer your questions</li>
+        <li>Update your Facebook status</li>
+        <li>Play a game(?)</li>
+      </ul>
+    </li>
+  </ul>
+
+  <h3>The plan</h3>
   <ul>
     <li>Form groups of 2-3</li>
-    <li>Decide on a platform and technology stack</li>
-    <ul>
-      <li>You can use any platform you like</li>
-      <ul>
-        <li>Web based</li>
-        <li>Console app</li>
-        <li>Mobile app</li>
-        <li>Windows/MacOS Client</li>
-        <li>Even an app for a games console ... if you happen to have brought one</li>
-      </ul>
-      <li>We'll provide a couple of starter projects (below) to demonstrate the API or to help get you started if you would like.</li>
-      <li>Nobody is expecting a fully working product.</li>
-      <ul>
-        <li>Pick a technology you think will be fun, and spend the time aiming for basic functionality.</li>
-        <li>Or pick a technology you are comfortable with and spend time adding some polish or interesting features
-          (perhaps nice look/feel, or emojis, or room-switching....)</li>
-      </ul>
-    </ul>
-    <li>Hack! You'll have four hours to build something</li>
-    <li>We'll be wondering around. Ask if you would like any assistance.</li>
-    <li>At the end of the afternoon, we'll ask you to show us what you came up with.</li>
-    <ul>
-      <li>What technology stack did you decide on? Why?</li>
-      <li>What did you get working? What didn't you?</li>
-      <li>Any interesting bits of code you'd like to show off??</li>
-      <li>Demonstrate your client.</li>
-    </ul>
+    <li>Discuss, agree your idea</li>
+    <li>Choose your technology stack and target platform.</li>
+    <li><strong><em>Hack!</em></strong> - prototype your ideas as quick as you can. We <em>all</em> like to have the
+      perfect project structure; however, you will gain more from something that works and breaks quickly that having a
+      neat, elegant project structure!
+    </li>
   </ul>
+
+  <h4>And Then ... Present</h4>
+  <p>At the end of the day, you get to show off your work. Nobody is expecting anything refined or fully working, an
+    afternoon is not a lot of time!</p>
+  <ul>
+    <li>What was your idea?</li>
+    <li>What platform and technology stack did you choose? why?</li>
+    <li>How far did you get? What works? What doesn't?</li>
+    <li>Quick demo</li>
+    <li>Any cool bits of code you want to show off?!</li>
+  </ul>
+
 </div>
 <div>
   <h3>API</h3>
   <h4><code>{{backendProtocol}}{{backendRoot}}</code></h4>
   <h5>Routes</h5>
   <table>
-    <tr><td><code>GET</code></td><td><code>/rooms</code></td><td>Retrieves a list of the rooms with recent activity.</td></tr>
-    <tr><td><code>GET</code></td><td><code>/rooms/:room</code></td><td>Gets most recent messages for the chat room.</td></tr>
-    <tr><td><code>POST</code></td><td><code>/rooms/:room</code></td><td>Post a message to the chat room</td></tr>
-    <tr><td><code>GET</code></td><td><code>/rooms/:room/ws</code></td><td>Open a WebSocket for event-driven sending and receiving of messages</td></tr>
+    <tr>
+      <td><code>GET</code></td>
+      <td><code>/rooms</code></td>
+      <td>Retrieves a list of the rooms with recent activity.</td>
+    </tr>
+    <tr>
+      <td><code>GET</code></td>
+      <td><code>/rooms/:room</code></td>
+      <td>Gets most recent messages for the chat room.</td>
+    </tr>
+    <tr>
+      <td><code>POST</code></td>
+      <td><code>/rooms/:room</code></td>
+      <td>Post a message to the chat room</td>
+    </tr>
+    <tr>
+      <td><code>GET</code></td>
+      <td><code>/rooms/:room/ws</code></td>
+      <td>Open a WebSocket for event-driven sending and receiving of messages</td>
+    </tr>
   </table>
   <h5>Objects</h5>
   <p>A sent message should resemble:</p>
@@ -70,8 +108,11 @@
   <h4>Useful Links:</h4>
   <ul>
     <li><a href="#/room">Basic Demo UI</a></li>
-    <li><a href="https://chrome.google.com/webstore/detail/postman/fhbjgbiflinjbdggehcddcbncdddomop?hl=en">PostMan</a></li>
-    <li><a href="https://chrome.google.com/webstore/detail/dark-websocket-terminal/dmogdjmcpfaibncngoolgljgocdabhke?hl=en">Dark WebSocket Terminal</a></li>
+    <li><a href="https://chrome.google.com/webstore/detail/postman/fhbjgbiflinjbdggehcddcbncdddomop?hl=en">PostMan</a>
+    </li>
+    <li><a
+      href="https://chrome.google.com/webstore/detail/dark-websocket-terminal/dmogdjmcpfaibncngoolgljgocdabhke?hl=en">Dark
+      WebSocket Terminal</a></li>
     <li>View the source code on <a href="https://github.com/sambott/toy-chat-server">GitHub</a></li>
   </ul>
 </div>
