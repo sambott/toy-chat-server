@@ -112,7 +112,7 @@ At the end of the day, you get to show off your work. Nobody is expecting anythi
 | `GET` | `/rooms` | Retrieves a list of the rooms with recent activity |
 | `GET` | `/rooms/:room` | Gets most recent messages for the chat room |
 | `POST` | `/rooms/:room` | Post a message to the chat room |
-| `POST` | `/rooms/:room/ws` | Open a WebSocket for event-driven sending and receiving of messages |
+| `GET` | `/rooms/:room/ws` | Open a WebSocket for event-driven sending and receiving of messages |
 
 ]
 
@@ -180,4 +180,6 @@ We'll be wandering around, if you want someone to bounce ideas off or are strugg
 ???
 
 Introduce other "mentors"
+Wifi Key
+Any Questions?
 
