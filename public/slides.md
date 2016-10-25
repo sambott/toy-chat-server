@@ -65,10 +65,12 @@ Be inspired, come up with something that sounds interesting to you, and is achie
 
 ### The plan
 
-* Form groups of 2-3
+* Form small groups
 * Discuss, agree your idea
 * Choose your technology stack and target platform.
-* ***Hack!*** - prototype your ideas as quick as you can. We _all_ like to have the perfect project structure; however, you will gain more from something that works and breaks quickly that having a neat, elegant project structure!
+* ***Hack!***
+
+I would advise you prototype your ideas as quick as you can. We _all_ like to have the perfect project structure; however, you will gain more from something that works and breaks quickly than having a neat, elegant project structure!
 
 ]
 
@@ -173,7 +175,7 @@ class: middle, center, inverse
 
 # Enjoy!
 
-We'll be wondering around, if you want someone to bounce ideas off or are struggling with something, or just fancy a chat, flag someone down.
+We'll be wandering around, if you want someone to bounce ideas off or are struggling with something, or just fancy a chat, flag someone down.
 
 ???
 
